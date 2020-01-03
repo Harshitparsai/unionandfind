@@ -1,0 +1,72 @@
+Union and find datastructure is used to to union of the discreate items and then find their representative in the union find tree;
+in this code we have performed this in the complexity of O(1) using Union By rank and Path Compression
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+struct DisSet{
+    int *parent;
+    int *rank;
+    int n;
+    DisSet(int a)
+    {   n = a;
+        rank = new int[a];
+        parent = new int[a];
+        for(int i=0;i<a;i++)
+        {
+            parent[i] = i;
+            rank[i] = 1;
+        }
+    }
+    int find(int a)
+    {
+        if(parent[a] == a)
+            return a;
+        int rep = find(parent[a]); // else find(parent[a]) here we have performed the path compression
+        parent[a] = rep;
+    }
+    void UnionByRank(int a,int b)
+    {   // in this case we are moving smaller tree under the larger tree
+        int sa = find(a);
+        int sb = find(b);
+        if(sa == sb)
+        {
+            return;
+        }
+        else if(rank[sa] > rank[sb])
+        {
+            parent[sb] =sa;
+        }
+        else if(rank[sa] < rank[sb])
+        {
+            parent[sa] = sb;
+        }
+        else{
+            parent[sa] = sb;
+            rank[sa]++;
+        }
+    }
+    void Union(int a,int b)
+    {
+        int sa = find(a);
+        int sb = find(b);
+        if(sa == sb)
+            return;
+        parent[sa] = sb;
+    }
+};
+int main()
+{
+    int t;
+    cin>>t;
+    DisSet d = DisSet(t);
+    d.Union(1,2);
+    d.Union(2,3);
+    cout<<d.find(1)<<" ";
+    cout<<d.find(2)<<" ";
+    cout<<d.find(3)<<" ";
+    cout<<d.find(0)<<" ";
+    cout<<d.find(4)<<" ";
+    return 0;
+}
